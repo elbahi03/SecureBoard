@@ -1,6 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate pour redirection
 import axios from 'axios';
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['Accept'] = 'application/json';
+
+// Helper pour lire un cookie par nom
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -16,21 +30,35 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/login', {
-        email,
-        password,
-      });
+      // Init cookie CSRF pour Sanctum
+      await axios.get('/sanctum/csrf-cookie');
 
-      console.log('Connexion réussie !', response.data);
-      localStorage.setItem('authToken', response.data.token);
+      // Forcer l'en-tête X-XSRF-TOKEN à partir du cookie si présent
+      const xsrfToken = getCookie('XSRF-TOKEN');
+      if (xsrfToken) {
+        axios.defaults.headers.common['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
+      }
+
+      // Appel de la route web /login (pas /api/login)
+      const response = await axios.post(
+        '/login',
+        { email, password },
+        { withCredentials: true }
+      );
+
+      console.log('Connexion réussie !', response.status);
 
       // Redirection vers le dashboard après login
       navigate('/dashboard');
 
     } catch (err) {
-      console.error('Erreur de connexion', err.response);
-      if (err.response && err.response.status === 401) {
+      console.error('Erreur de connexion', err?.response || err);
+      if (err.response && (err.response.status === 401 || err.response.status === 422)) {
         setError('Email ou mot de passe incorrect.');
+      } else if (err.response && err.response.status === 419) {
+        setError('Session expirée ou CSRF invalide. Réessayez.');
+      } else if (err.response && err.response.status === 404) {
+        setError("La route /login n'est pas accessible. Vérifiez le backend.");
       } else {
         setError('Une erreur est survenue. Veuillez réessayer.');
       }

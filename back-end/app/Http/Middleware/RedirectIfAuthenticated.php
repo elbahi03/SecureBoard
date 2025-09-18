@@ -21,7 +21,12 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // Pour les requêtes AJAX/SPA, ne pas rediriger vers /dashboard
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->noContent();
+                }
+
+                return redirect()->intended(RouteServiceProvider::HOME);
             }
         }
 
