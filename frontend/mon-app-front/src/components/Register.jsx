@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,17 +30,26 @@ function Register() {
     setLoading(true);
 
     try {
+      await axios.get('/sanctum/csrf-cookie');
+
+      // Forcer l'en-tête X-XSRF-TOKEN à partir du cookie si présent
+      const xsrfToken = getCookie('XSRF-TOKEN');
+      if (xsrfToken) {
+        axios.defaults.headers.common['X-XSRF-TOKEN'] = decodeURIComponent(xsrfToken);
+      }
+
+      console.log("data to send:", { name, email, password });
       const response = await axios.post('http://localhost:8000/api/register', {
         name,
         email,
         password,
       });
 
-      console.log('Inscription réussie !', response.data);
+      console.log('Inscription réussie !', response);
       localStorage.setItem('authToken', response.data.token);
 
       // Redirection vers le dashboard après inscription
-      navigate('/dashboard');
+      //navigate('/dashboard');
 
     } catch (err) {
       console.error('Erreur d\'inscription', err.response);
