@@ -49,7 +49,7 @@ function Register() {
       localStorage.setItem('authToken', response.data.token);
 
       // Redirection vers le dashboard après inscription
-      //navigate('/dashboard');
+      navigate('/dashboard');
 
     } catch (err) {
       console.error('Erreur d\'inscription', err.response);

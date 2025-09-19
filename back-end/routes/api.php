@@ -21,3 +21,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest');
+
+Route::middleware(['auth:sanctum','manager'])->group(function () {
+    Route::apiResource('manager/projects', ManagerProjectController::class);
+});
+    
