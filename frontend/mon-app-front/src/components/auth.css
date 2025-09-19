@@ -1,0 +1,128 @@
+/* Simple styles for Login and Register components */
+
+:root {
+  --primary: #2563eb; /* blue-600 */
+  --primary-hover: #1d4ed8; /* blue-700 */
+  --text: #111827; /* gray-900 */
+  --muted: #6b7280; /* gray-500 */
+  --bg: #f3f4f6; /* gray-100 */
+  --border: #e5e7eb; /* gray-200 */
+  --ring: rgba(37, 99, 235, 0.35);
+}
+
+/* Page base (kept light and neutral) */
+html, body, #root {
+  height: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Centered auth card */
+.login-container,
+.register-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 56px auto;
+  padding: 28px 24px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.login-container h2,
+.register-container h2 {
+  text-align: center;
+  margin: 8px 0 18px 0;
+}
+
+/* Form layout */
+.form-group {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.form-group input[type="email"],
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  background: #fff;
+}
+
+.form-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+/* Error text */
+.error-message {
+  margin: 6px 0 10px 0;
+  font-size: 14px;
+}
+
+/* Primary button */
+.submit-button,
+.btn-primary {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.02s ease;
+}
+
+.submit-button:hover,
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.submit-button:active,
+.btn-primary:active {
+  transform: translateY(0.5px);
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Links */
+a {
+  color: var(--primary);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Small screens spacing */
+@media (max-width: 420px) {
+  .login-container,
+  .register-container {
+    margin: 36px 12px;
+    padding: 22px 16px;
+    border-radius: 10px;
+  }
+}

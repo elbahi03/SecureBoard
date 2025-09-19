@@ -23,7 +23,7 @@ export default function DashboardLayout() {
   const navigation = [
     { name: 'Tableau de bord', href: '/dashboard', icon: HomeIcon },
     { name: 'Projets', href: '/dashboard/projects', icon: FolderIcon },
-    ...(user?.roles.includes('admin')
+    ...(user?.roles?.includes('admin')
       ? [{ name: 'Utilisateurs', href: '/dashboard/users', icon: UsersIcon }]
       : []),
     { name: 'Profil', href: '/dashboard/profile', icon: UserCircleIcon },

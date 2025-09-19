@@ -1,9 +1,16 @@
 import api from './api';
+import axios from 'axios';
 
 const authService = {
   async login(credentials) {
-    const response = await api.post('/login', credentials);
-    return response.data;
+    // Perform web login with Sanctum cookies, then fetch the authenticated user
+    await axios.get('http://localhost:8000/sanctum/csrf-cookie', { withCredentials: true });
+    await axios.post('http://localhost:8000/login', credentials, {
+      withCredentials: true,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    const me = await api.get('/user');
+    return me.data;
   },
 
   async register(userData) {
@@ -12,8 +19,11 @@ const authService = {
   },
 
   async logout() {
-    const response = await api.post('/logout');
-    return response.data;
+    await axios.post('http://localhost:8000/logout', {}, {
+      withCredentials: true,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    return { success: true };
   },
 
   async forgotPassword(email) {

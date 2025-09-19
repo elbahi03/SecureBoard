@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './auth.css';
+
+// Ensure axios is configured for Sanctum session authentication
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['Accept'] = 'application/json';
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -39,14 +48,13 @@ function Register() {
       }
 
       console.log("data to send:", { name, email, password });
-      const response = await axios.post('http://localhost:8000/api/register', {
+      const response = await axios.post('/register', {
         name,
         email,
         password,
-      });
+      }, { withCredentials: true });
 
-      console.log('Inscription réussie !', response);
-      localStorage.setItem('authToken', response.data.token);
+      console.log('Inscription réussie !', response.status);
 
       // Redirection vers le dashboard après inscription
       navigate('/dashboard');

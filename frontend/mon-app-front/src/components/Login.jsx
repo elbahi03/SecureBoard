@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // useNavigate pour redirection
 import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
+import './auth.css';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
@@ -23,6 +25,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { login: setUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,6 +50,16 @@ function Login() {
       );
 
       console.log('Connexion réussie !', response.status);
+
+      // Récupérer l'utilisateur courant puis mettre à jour le contexte
+      try {
+        const me = await axios.get('/api/user', { withCredentials: true });
+        setUser(me.data);
+      } catch (e) {
+        console.warn('Impossible de récupérer /api/user après login', e?.response || e);
+        // Fallback: set minimal user so PrivateRoute authorizes access
+        setUser({ email, name: email?.split('@')[0] || 'Utilisateur', roles: [] });
+      }
 
       // Redirection vers le dashboard après login
       navigate('/dashboard');
