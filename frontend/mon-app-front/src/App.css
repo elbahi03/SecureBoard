@@ -1,42 +1,330 @@
+/* Styles spécifiques à l'application */
+
+/* Container principal de l'app */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  @apply min-h-screen;
+  background-color: var(--gray-50);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Logo de l'application */
+.app-logo {
+  @apply h-8 w-auto;
+  transition: filter 300ms ease;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.app-logo:hover {
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.4));
+}
+
+/* Navigation principale */
+.main-nav {
+  @apply bg-white shadow-sm border-b;
+  border-color: var(--gray-200);
+}
+
+.main-nav .nav-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.main-nav .nav-content {
+  @apply flex justify-between items-center h-16;
+}
+
+/* Sidebar navigation */
+.sidebar-nav {
+  @apply space-y-1;
+}
+
+.sidebar-nav .nav-item {
+  @apply nav-link;
+}
+
+.sidebar-nav .nav-item.active {
+  @apply nav-link active;
+  background-color: var(--primary-50);
+  color: var(--primary-700);
+  border-right: 3px solid var(--primary-600);
+}
+
+.sidebar-nav .nav-item:not(.active):hover {
+  background-color: var(--gray-50);
+  color: var(--gray-900);
+}
+
+/* Page headers */
+.page-header {
+  @apply mb-8;
+}
+
+.page-title {
+  @apply text-2xl font-bold;
+  color: var(--gray-900);
+}
+
+.page-subtitle {
+  @apply mt-2 text-sm;
+  color: var(--gray-600);
+}
+
+/* Content sections */
+.content-section {
+  @apply bg-white rounded-lg shadow-sm border p-6 mb-6;
+  border-color: var(--gray-200);
+}
+
+.content-section-header {
+  @apply flex items-center justify-between mb-4;
+}
+
+.content-section-title {
+  @apply text-lg font-semibold;
+  color: var(--gray-900);
+}
+
+/* Tables améliorées */
+.data-table {
+  @apply table;
+}
+
+.data-table thead {
+  background-color: var(--gray-50);
+}
+
+.data-table th {
+  @apply px-6 py-3 text-left text-xs font-medium uppercase tracking-wider;
+  color: var(--gray-500);
+}
+
+.data-table td {
+  @apply px-6 py-4 whitespace-nowrap text-sm;
+  color: var(--gray-900);
+}
+
+.data-table tbody tr {
+  @apply border-b;
+  border-color: var(--gray-200);
+  transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: var(--primary-50);
+}
+
+/* Actions dans les tables */
+.table-actions {
+  @apply flex items-center space-x-3;
+}
+
+.table-action {
+  @apply text-sm font-medium;
+  transition: color 0.2s ease;
+}
+
+.table-action.edit {
+  color: var(--primary-600);
+}
+
+.table-action.edit:hover {
+  color: var(--primary-700);
+}
+
+.table-action.delete {
+  color: var(--red-600);
+}
+
+.table-action.delete:hover {
+  color: var(--red-700);
+}
+
+/* Modales */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4;
+  z-index: 1000;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg shadow-xl max-w-md w-full max-h-screen overflow-y-auto;
+}
+
+.modal-header {
+  @apply px-6 py-4 border-b;
+  border-color: var(--gray-200);
+}
+
+.modal-title {
+  @apply text-lg font-semibold;
+  color: var(--gray-900);
+}
+
+.modal-body {
+  @apply px-6 py-4;
+}
+
+.modal-footer {
+  @apply px-6 py-4 border-t flex justify-end space-x-3;
+  border-color: var(--gray-200);
+  background-color: var(--gray-50);
+}
+
+/* États de chargement */
+.loading-container {
+  @apply flex items-center justify-center py-12;
+}
+
+.loading-spinner {
+  @apply spinner-lg;
+  color: var(--primary-600);
+}
+
+.loading-text {
+  @apply ml-3 text-sm;
+  color: var(--gray-600);
+}
+
+/* États vides */
+.empty-state {
+  @apply text-center py-12;
+}
+
+.empty-state-icon {
+  @apply mx-auto h-12 w-12 mb-4;
+  color: var(--gray-400);
+}
+
+.empty-state-title {
+  @apply text-lg font-medium mb-2;
+  color: var(--gray-900);
+}
+
+.empty-state-description {
+  @apply text-sm mb-6;
+  color: var(--gray-500);
+}
+
+/* Badges et statuts */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge.primary {
+  background-color: var(--primary-100);
+  color: var(--primary-800);
+}
+
+.badge.success {
+  background-color: var(--green-100);
+  color: var(--green-800);
+}
+
+.badge.warning {
+  background-color: var(--yellow-100);
+  color: var(--yellow-800);
+}
+
+.badge.danger {
+  background-color: var(--red-100);
+  color: var(--red-800);
+}
+
+/* Tooltips */
+.tooltip {
+  @apply absolute z-50 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded shadow-lg;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.tooltip.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .content-section {
+    @apply p-4;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .data-table {
+    @apply text-sm;
+  }
+  
+  .data-table th,
+  .data-table td {
+    @apply px-3 py-2;
+  }
+  
+  .modal-content {
+    @apply max-w-full mx-4;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Animations d'entrée pour les éléments */
+.fade-in {
+  @apply animate-fade-in;
 }
 
-.card {
-  padding: 2em;
+.slide-in {
+  @apply animate-slide-in;
 }
 
-.read-the-docs {
-  color: #888;
+/* Focus visible pour l'accessibilité */
+.focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Styles pour les formulaires dans les modales */
+.modal-form .form-group {
+  @apply mb-4;
+}
+
+.modal-form .form-group:last-child {
+  @apply mb-0;
+}
+
+/* Amélioration des boutons dans les actions */
+.btn-group {
+  @apply flex space-x-2;
+}
+
+.btn-group .btn-primary,
+.btn-group .btn-secondary,
+.btn-group .btn-danger {
+  @apply flex-1;
+}
+
+/* Styles pour les notifications/toasts */
+.toast {
+  @apply fixed top-4 right-4 max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto;
+  z-index: 1050;
+}
+
+.toast.success {
+  @apply border-l-4;
+  border-color: var(--green-500);
+}
+
+.toast.error {
+  @apply border-l-4;
+  border-color: var(--red-500);
+}
+
+.toast.warning {
+  @apply border-l-4;
+  border-color: var(--yellow-500);
+}
+
+.toast-content {
+  @apply p-4;
+}
+
+.toast-title {
+  @apply font-medium text-sm;
+  color: var(--gray-900);
+}
+
+.toast-message {
+  @apply mt-1 text-sm;
+  color: var(--gray-500);
 }
